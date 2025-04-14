@@ -1,0 +1,21 @@
+package com.assessment1.serviceB.serviceImp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.assessment1.serviceB.entity.Entity;
+import com.assessment1.serviceB.repository.RepositoryB;
+import com.assessment1.serviceB.service.ServiceB;
+
+public class ServiceBImp implements ServiceB  {
+
+	@Autowired
+	RepositoryB repo;
+	
+	@Override
+	public Entity saveEntity(Entity entity) {
+		
+		return repo.save(entity);
+		
+	}
+
+}

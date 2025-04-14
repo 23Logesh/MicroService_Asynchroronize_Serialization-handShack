@@ -1,0 +1,23 @@
+package com.assessment1.serviceA.serviceImp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceA.entity.Entity;
+import com.assessment1.serviceA.repository.Repository;
+import com.assessment1.serviceA.service.ServiceA;
+
+@Service
+public class ServiceAImp implements ServiceA{
+	
+	@Autowired
+	Repository repository;
+
+	@Override
+	public Entity saveEntity(Entity entity) {
+		
+		return repository.save(entity);
+	
+	}
+
+}

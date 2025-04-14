@@ -1,0 +1,13 @@
+package com.assessment1.serviceC.serviceImp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.assessment1.serviceC.repository.RepositoryC;
+import com.assessment1.serviceC.service.serviceC;
+
+public class serviceCImp implements serviceC {
+	
+	@Autowired
+	RepositoryC repo;
+
+}

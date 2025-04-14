@@ -1,0 +1,25 @@
+package com.assessment1.serviceC.serviceImp;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceC.entity.Entity;
+import com.assessment1.serviceC.repository.RepositoryC;
+import com.assessment1.serviceC.service.ServiceC;
+
+@Service
+public class ServiceCImp implements ServiceC {
+	
+	@Autowired
+	RepositoryC repo;
+
+	@Override
+	public void saveEntity(Entity entity) {
+		
+		repo.save(entity);
+		
+	}
+	
+	
+
+}

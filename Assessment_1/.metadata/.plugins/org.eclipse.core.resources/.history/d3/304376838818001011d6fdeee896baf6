@@ -1,0 +1,34 @@
+package com.assessment1.serviceA.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
+import com.assessment1.serviceA.entity.Entity;
+import com.assessment1.serviceA.service.ServiceA;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+@RestController
+@RequestMapping("/serviceA")
+public class ControllerA {
+	
+	@Autowired
+	ServiceA serviceA;
+	
+	@Autowired
+	RestTemplate resttempleate;
+	
+	@PostMapping
+	public Entity postMethodName(@RequestBody Entity entity) {
+		
+		entity = serviceA.saveEntity(entity);
+		entity = resttempleate.postForEntity("http://localhost:8082/serviceB", entity, Entity.class).getBody();
+		return entity;
+	}
+	
+
+}

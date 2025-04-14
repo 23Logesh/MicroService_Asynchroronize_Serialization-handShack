@@ -1,0 +1,29 @@
+package com.assessment1.serviceC.consumer;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+import com.assessment1.serviceC.entity.Entity;
+import com.assessment1.serviceC.entity.EntityDto;
+import com.assessment1.serviceC.service.ServiceC;
+
+@Component
+public class Consumer {
+	@Autowired
+	ServiceC serviceC;
+	@Autowired
+	Entity entity;
+	
+
+	 @KafkaListener(topics = "ServerB-topic")
+	public void saveEntity(EntityDto entityDto)
+	{
+		 entity.setId(entityDto.getId());
+		 entity.setMessage(entityDto.getMessage());
+		 
+		serviceC.saveEntity(entity);
+		System.out.print("Received data from service B : "+entity);
+	}
+
+}

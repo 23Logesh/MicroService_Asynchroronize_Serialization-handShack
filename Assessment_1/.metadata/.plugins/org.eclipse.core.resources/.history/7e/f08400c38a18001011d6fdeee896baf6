@@ -1,0 +1,12 @@
+package com.assessment1.serviceA.entity;
+
+import lombok.Data;
+
+@Data
+@jakarta.persistence.Entity
+public class Entity {
+	
+	int id;
+	String message;
+
+}

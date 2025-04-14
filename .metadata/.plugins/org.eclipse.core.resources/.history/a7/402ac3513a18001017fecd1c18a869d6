@@ -1,0 +1,12 @@
+spring:
+  kafka:
+    bootstrap-servers: b71mv4ts-9092.inc1.devtunnels.ms:9092
+    consumer:
+      group-id: my-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+server:
+  address: 0.0.0.0
+  port: 8892
