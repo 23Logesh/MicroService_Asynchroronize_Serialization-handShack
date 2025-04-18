@@ -15,7 +15,7 @@ public class Consumer {
     @Autowired
     private ServiceC serviceC;
 
-    @KafkaListener(topics = "ServerB-topic")
+    @KafkaListener(topics = "ServerB-topic", groupId="my-group")
     public void saveEntity(String message) {
         log.info("[Consumer] Received message: {}", message);
         

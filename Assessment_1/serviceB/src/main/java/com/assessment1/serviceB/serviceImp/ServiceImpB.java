@@ -1,0 +1,64 @@
+package com.assessment1.serviceB.serviceImp;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceB.dto.Dto;
+import com.assessment1.serviceB.entity.Entity;
+import com.assessment1.serviceB.repository.RepositoryB;
+import com.assessment1.serviceB.service.ServiceB;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class ServiceImpB implements ServiceB {
+
+    @Autowired
+    private RepositoryB repo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemp;
+    
+    @Autowired
+    private ObjectMapper objectMpper;
+
+    @Override
+    public Dto saveEntity(Dto obj) {
+        log.info("[ServiceB] Saving entity for DTO: {}", obj);
+
+        Entity savedEntity = repo.save(convertDtoToEntity(obj));
+        Dto savedDto = convertEntityToDto(savedEntity);
+
+        sendObject(savedDto);
+        log.info("[ServiceB] DTO sent to Kafka: {}", savedDto);
+
+        return savedDto;
+    }
+
+    public void sendObject(Dto obj) {
+    	String key =String.valueOf(obj.getId());    	
+        try {
+			kafkaTemp.send("ServerB-topic", key, objectMpper.writerWithDefaultPrettyPrinter().writeValueAsString(obj));
+		} catch (JsonProcessingException e) {
+			log.warn("[ServiceB] Kafka message has a problem to send topic on 'ServerB-topic' as "+e);
+			e.printStackTrace();
+		}
+        log.debug("[ServiceB] Kafka message sent on topic 'ServerB-topic'");
+    }
+
+    Entity convertDtoToEntity(Dto dto) {
+        return modelMapper.map(dto, Entity.class);
+    }
+
+    Dto convertEntityToDto(Entity entity) {
+        return modelMapper.map(entity, Dto.class);
+    }
+}
