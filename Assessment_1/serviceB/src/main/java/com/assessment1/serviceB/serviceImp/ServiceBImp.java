@@ -9,6 +9,8 @@ import com.assessment1.serviceB.dto.Dto;
 import com.assessment1.serviceB.entity.Entity;
 import com.assessment1.serviceB.repository.RepositoryB;
 import com.assessment1.serviceB.service.ServiceB;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,6 +26,9 @@ public class ServiceBImp implements ServiceB {
 
     @Autowired
     private KafkaTemplate<String, String> kafkaTemp;
+    
+    @Autowired
+    private ObjectMapper objectMpper;
 
     @Override
     public Dto saveEntity(Dto obj) {
@@ -39,7 +44,13 @@ public class ServiceBImp implements ServiceB {
     }
 
     public void sendObject(Dto obj) {
-        kafkaTemp.send("ServerB-topic", obj.toString());
+    	
+    	
+        try {
+			kafkaTemp.send("ServerB-topic", objectMpper.writerWithDefaultPrettyPrinter().writeValueAsString(obj));
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
         log.debug("[ServiceB] Kafka message sent on topic 'ServerB-topic'");
     }
 
