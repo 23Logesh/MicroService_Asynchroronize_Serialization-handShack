@@ -1,0 +1,51 @@
+package com.assessment1.serviceA.exception;
+ 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus; 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice; 
+
+import com.assessment1.serviceA.utility.ResponseStructure;
+
+import lombok.extern.slf4j.Slf4j;
+
+@RestControllerAdvice
+@Slf4j
+public class GlobalExceptionHandler {
+
+	
+	@Autowired
+	ResponseStructure responseStructure;
+	
+
+
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ResponseStructure>  handleNullPointerException(NullPointerException e) {
+    	log.error("NullPointerException caught: {}", e.getMessage(), e);
+    	
+    	responseStructure.setMessage("A null value was encountered ");
+    	responseStructure.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+        log.info("Returning NullPointer Exception response with message: \"A null value was encountered \"");
+    	return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+    }
+    
+ 
+    
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ResponseStructure> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        log.error("DataIntegrityViolationException caught: {}", e.getMessage(), e);
+
+        String Message = e.getMostSpecificCause().getMessage().replaceAll("for key '.*?'", "");
+        responseStructure.setMessage("Data integrity violation: " + Message);
+        responseStructure.setStatus(HttpStatus.NOT_ACCEPTABLE.value());
+        
+        log.info("Returning DataIntegrityViolationException response with message: {}", Message);
+        return new ResponseEntity<>(responseStructure, HttpStatus.OK);
+    }
+    
+    public 
+    
+}

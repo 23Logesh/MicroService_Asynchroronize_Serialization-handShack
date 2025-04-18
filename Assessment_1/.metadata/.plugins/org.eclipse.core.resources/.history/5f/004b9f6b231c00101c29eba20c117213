@@ -1,0 +1,43 @@
+package com.assessment1.serviceA.serviceImp;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.assessment1.serviceA.dto.Dto;
+import com.assessment1.serviceA.entity.Entity;
+import com.assessment1.serviceA.repository.Repository;
+import com.assessment1.serviceA.service.ServiceA;
+
+@Service
+public class ServiceAImp implements ServiceA{
+	
+	@Autowired
+	Repository repository;
+	
+	@Autowired
+	RestTemplate resttempleate;
+	
+	@Autowired
+	ModelMapper modelMapper;
+
+	@Override
+	public Dto saveEntity(Dto entity) {
+		repository.save(convertEntityToDto(entity));
+		entity = ;
+		return resttempleate.postForEntity("http://localhost:8082/serviceB", entity, Entity.class).getBody();
+	
+	}
+	
+	Entity convertDtoToEntity(Dto dto)
+	{
+		return modelMapper.map(dto, Entity.class);
+	}
+	
+	Dto convertEntityToDto(Entity entity)
+	{
+		return modelMapper.map(entity, Dto.class);
+	}
+
+}

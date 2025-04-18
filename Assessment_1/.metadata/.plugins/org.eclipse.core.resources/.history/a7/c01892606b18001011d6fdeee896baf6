@@ -1,0 +1,14 @@
+package com.assessment1.serviceA.serviceImp;
+
+import com.assessment1.serviceA.entity.Entity;
+import com.assessment1.serviceA.service.ServiceA;
+
+public class ServiceAImp implements ServiceA{
+
+	@Override
+	public Entity saveEntity(Entity entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

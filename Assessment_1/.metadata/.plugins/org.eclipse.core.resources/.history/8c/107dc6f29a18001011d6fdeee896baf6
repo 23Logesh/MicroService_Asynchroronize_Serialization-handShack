@@ -1,0 +1,9 @@
+package com.assessment1.serviceC.entity;
+
+import lombok.Data;
+
+@Data
+public class EntityDto {
+	int id;
+	String message;
+}

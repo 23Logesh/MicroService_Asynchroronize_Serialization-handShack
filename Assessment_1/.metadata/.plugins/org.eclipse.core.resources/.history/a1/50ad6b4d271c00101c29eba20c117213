@@ -1,0 +1,40 @@
+package com.assessment1.serviceC.serviceImp;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceB.dto.Dto;
+import com.assessment1.serviceC.entity.Entity;
+import com.assessment1.serviceC.repository.RepositoryC;
+import com.assessment1.serviceC.service.ServiceC;
+
+@Service
+public class ServiceCImp implements ServiceC {
+	
+	@Autowired
+	RepositoryC repo;
+	
+
+	@Autowired
+	ModelMapper modelMapper;
+
+	@Override
+	public void saveEntity(Entity entity) {
+		
+		repo.save(entity);
+		
+	}
+	
+	Entity convertDtoToEntity(Dto dto)
+	{
+		return modelMapper.map(dto, Entity.class);
+	}
+	
+	Dto convertEntityToDto(Entity dto)
+	{
+		return modelMapper.map(dto, Dto.class);
+	}
+	
+
+}

@@ -1,0 +1,18 @@
+package com.assessment1.serviceC.consumer;
+
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.assessment1.serviceC.entity.Entity;
+
+
+public class ControllerC {
+	
+	@KafkaListener(topics = "ServerB-topic")
+	public void saveEntity(Entity entity)
+	{
+		System.out.print(entity);
+	}
+
+}

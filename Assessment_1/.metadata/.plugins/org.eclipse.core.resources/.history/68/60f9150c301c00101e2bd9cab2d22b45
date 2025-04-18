@@ -1,0 +1,50 @@
+package com.assessment1.serviceC.serviceImp;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceC.dto.Dto;
+import com.assessment1.serviceC.entity.Entity;
+import com.assessment1.serviceC.repository.RepositoryC;
+import com.assessment1.serviceC.service.ServiceC;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Service
+public class ServiceCImp implements ServiceC {
+	
+	@Autowired
+	RepositoryC repo;
+	
+
+	@Autowired
+	ModelMapper modelMapper;
+
+	@Override
+	public void saveEntity(String message) {
+		
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        Dto obj =null;
+		try {
+			obj = objectMapper.readValue(message, Dto.class);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		repo.save(convertDtoToEntity(obj));
+		
+	}
+	
+	Entity convertDtoToEntity(Dto dto)
+	{
+		if(dto==null)
+			return null;
+		
+		return modelMapper.map(dto, Entity.class);
+	}
+	
+	
+	
+
+}

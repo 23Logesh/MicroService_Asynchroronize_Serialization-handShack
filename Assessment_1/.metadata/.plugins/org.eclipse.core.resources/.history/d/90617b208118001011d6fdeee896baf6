@@ -1,0 +1,19 @@
+package com.assessment1.serviceC.controller;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.assessment1.serviceC.entity.Entity;
+
+@RestController
+@RequestMapping("/serviceC")
+public class ControllerC {
+	
+	@PostMapping
+	public Entity saveEntity(Entity entity)
+	{
+		
+	}
+
+}

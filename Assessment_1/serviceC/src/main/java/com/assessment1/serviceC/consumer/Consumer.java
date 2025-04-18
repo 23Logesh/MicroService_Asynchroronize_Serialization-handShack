@@ -4,33 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import com.assessment1.serviceC.entity.Entity;
 import com.assessment1.serviceC.service.ServiceC;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
+import lombok.extern.slf4j.Slf4j;
 
 @Component
+@Slf4j
 public class Consumer {
-	@Autowired
-	ServiceC serviceC;
 
-	
-	
+    @Autowired
+    private ServiceC serviceC;
 
-	 @KafkaListener(topics = "ServerB-topic")
-	public void saveEntity(String message)
-	{  try {
-        ObjectMapper objectMapper = new ObjectMapper();
-        Entity entity = objectMapper.readValue(message, Entity.class);
-		 
-		serviceC.saveEntity(entity);
-		System.out.print("Received data from service B : "+entity);
-		
-	 } 
-	catch (Exception e) {
-	        e.printStackTrace();
-	    }
-	}
-	 
+    @KafkaListener(topics = "ServerB-topic", groupId="my-group")
+    public void saveEntity(String message) {
+        log.info("[Consumer] Received message: {}", message);
+        
+        serviceC.saveEntity(message);
+        
+        log.info("[Consumer] Processed message and saved entity.");
+    }
 }
-	 
-	
