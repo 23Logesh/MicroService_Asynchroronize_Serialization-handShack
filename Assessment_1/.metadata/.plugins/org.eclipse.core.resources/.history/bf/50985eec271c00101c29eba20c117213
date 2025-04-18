@@ -1,0 +1,9 @@
+package com.assessment1.serviceC.service;
+
+import com.assessment1.serviceC.dto.Dto;
+
+public interface ServiceC {
+
+	void saveEntity(String message);
+
+}

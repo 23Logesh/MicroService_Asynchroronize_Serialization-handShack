@@ -1,0 +1,75 @@
+package com.assessment1.serviceB.serviceImp;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceB.dto.Dto;
+import com.assessment1.serviceB.entity.Entity;
+import com.assessment1.serviceB.repository.RepositoryB;
+import com.assessment1.serviceB.service.ServiceB;
+
+import lombok.extern.slf4j.Slf4j;
+
+@Service
+@Slf4j
+public class ServiceBImp implements ServiceB {
+
+    @Autowired
+    private RepositoryB repo;
+
+    @Autowired
+    private ModelMapper modelMapper;
+
+    @Autowired
+    private KafkaTemplate<String, String> kafkaTemp;
+
+    @Override
+    public Dto saveEntity(Dto obj) {
+        log.info("📥 [saveEntity] - Received request to save DTO: {}", pretty(obj));
+
+        // DTO ➜ Entity
+        Entity entity = convertDtoToEntity(obj);
+        log.debug("🔄 [saveEntity] - Converted DTO to Entity: {}", pretty(entity));
+
+        // Save Entity
+        entity = repo.save(entity);
+        log.info("✅ [saveEntity] - Entity saved to database: {}", pretty(entity));
+
+        // Entity ➜ DTO
+        obj = convertEntityToDto(entity);
+        log.debug("🔄 [saveEntity] - Converted Entity back to DTO: {}", pretty(obj));
+
+        // Send to Kafka
+        sendObject(obj);
+
+        log.info("📤 [saveEntity] - Final DTO sent and returned: {}", pretty(obj));
+        return obj;
+    }
+
+    public void sendObject(Dto obj) {
+        try {
+            log.info("📡 [sendObject] - Sending DTO to Kafka topic [ServerB-topic]");
+            kafkaTemp.send("ServerB-topic", obj.toString());
+            log.debug("🛰️ [sendObject] - Kafka payload: {}", obj);
+        } catch (Exception e) {
+            log.error("❌ [sendObject] - Failed to send DTO to Kafka. Error: {}", e.getMessage(), e);
+        }
+    }
+
+    private Entity convertDtoToEntity(Dto dto) {
+        log.debug("🧬 [convertDtoToEntity] - Mapping DTO ➜ Entity: {}", pretty(dto));
+        return modelMapper.map(dto, Entity.class);
+    }
+
+    private Dto convertEntityToDto(Entity entity) {
+        log.debug("🧬 [convertEntityToDto] - Mapping Entity ➜ DTO: {}", pretty(entity));
+        return modelMapper.map(entity, Dto.class);
+    }
+
+    // Utility method to cleanly format objects in logs (optional)
+    private String pretty(Object obj) {
+        return obj != null ? obj.toString().replaceAll(", ", ",\n\t") : "null";
+    }
+}

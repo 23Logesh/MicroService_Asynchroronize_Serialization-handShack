@@ -1,5 +1,6 @@
 package com.assessment1.serviceA;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,13 @@ public class ServiceAApplication {
 	@Bean
 	RestTemplate restTemplate() {
 	    return new RestTemplate();
+	}
+	
+	@Bean
+	ModelMapper modelMapper() {
+		
+		return new ModelMapper();
+
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.assessment1.serviceA.service;
 
-import com.assessment1.serviceA.entity.Entity;
+import com.assessment1.serviceA.dto.Dto;
 
 public interface ServiceA {
 
-	Entity saveEntity(Entity entity);
+	Dto saveEntity(Dto obj);
 
 }

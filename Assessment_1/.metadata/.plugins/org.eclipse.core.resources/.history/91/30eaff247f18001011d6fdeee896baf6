@@ -1,0 +1,5 @@
+package com.assessment1.serviceB.serviceImp;
+
+public class ServiceBImp {
+
+}

@@ -1,0 +1,5 @@
+package com.assessment1.serviceA.service;
+
+public interface ServiceA {
+
+}

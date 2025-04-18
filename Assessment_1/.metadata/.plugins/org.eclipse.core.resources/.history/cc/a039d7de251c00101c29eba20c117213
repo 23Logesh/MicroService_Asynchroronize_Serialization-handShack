@@ -1,0 +1,28 @@
+package com.assessment1.serviceB.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.assessment1.serviceB.dto.Dto;
+import com.assessment1.serviceB.entity.Entity; 
+import com.assessment1.serviceB.service.ServiceB;
+
+@RestController
+@RequestMapping("/serviceB")
+public class ControllerB {
+	
+	@Autowired
+	ServiceB serviceB;
+		
+	@PostMapping
+    public Entity postMethodName(@RequestBody Dto obj) {
+		 serviceB.saveEntity(obj);
+		kafkaTemp.send("ServerB-topic", "Key",  obj.toString());
+		return obj;
+	}
+
+}

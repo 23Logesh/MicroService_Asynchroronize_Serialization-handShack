@@ -1,0 +1,6 @@
+package com.assessment1.serviceA.dto;
+
+public class Dto {
+	int id;
+	String message;
+}

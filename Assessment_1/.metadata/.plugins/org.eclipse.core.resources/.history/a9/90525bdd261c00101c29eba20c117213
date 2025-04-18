@@ -1,0 +1,52 @@
+package com.assessment1.serviceB.serviceImp;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+import com.assessment1.serviceB.dto.Dto;
+import com.assessment1.serviceB.entity.Entity;
+import com.assessment1.serviceB.repository.RepositoryB;
+import com.assessment1.serviceB.service.ServiceB;
+
+@Service
+public class ServiceBImp implements ServiceB  {
+
+	@Autowired
+	RepositoryB repo;
+	
+
+	@Autowired
+	ModelMapper modelMapper;
+	
+
+	@Autowired
+	KafkaTemplate<String, String> kafkaTemp;
+	
+	@Override
+	public Dto saveEntity(Dto obj) {
+		
+		
+		return convertEntityToDto(repo.save(convertDtoToEntity(obj)));
+		
+	}
+	
+	public void sendMessage(Dto obj)
+	{
+
+		kafkaTemp.send("ServerB-topic", "Message",  obj.toString());
+	}
+	
+	Entity convertDtoToEntity(Dto dto)
+	{
+		return modelMapper.map(dto, Entity.class);
+	}
+	
+	Dto convertEntityToDto(Entity dto)
+	{
+		return modelMapper.map(dto, Dto.class);
+	}
+
+
+}

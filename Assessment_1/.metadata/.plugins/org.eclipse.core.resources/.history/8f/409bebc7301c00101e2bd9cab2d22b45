@@ -1,0 +1,28 @@
+package com.assessment1.serviceA.controller;
+
+import org.springframework.web.bind.annotation.RestController;
+
+import com.assessment1.serviceA.dto.Dto;
+import com.assessment1.serviceA.service.ServiceA;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+
+@RestController
+@RequestMapping("/serviceA")
+public class ControllerA {
+	
+	@Autowired
+	ServiceA serviceA;
+		
+	@PostMapping
+	public Dto postMethodName(@RequestBody Dto obj) {
+		serviceA.saveEntity(obj);
+		return obj;
+	}
+	
+
+}
